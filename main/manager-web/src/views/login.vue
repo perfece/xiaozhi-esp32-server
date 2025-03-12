@@ -21,7 +21,7 @@
           <div style="padding: 0 30px;">
             <div class="input-box">
               <img src="@/assets/login/username.png" alt="" class="input-icon"/>
-              <el-input v-model="form.username" placeholder="请输入用户名"/>
+              <el-input v-model="form.mobile" placeholder="请输入用户名"/>
             </div>
             <div class="input-box">
               <img src="@/assets/login/password.png" alt="" class="input-icon"/>
@@ -71,13 +71,13 @@ export default {
   name: 'login',
   data() {
     return {
-      activeName: "username",
       form: {
-        username: '',
+        mobile: '',
         password: '',
-        captcha: ''
+        captcha: '',
+        captchaId: '',
       },
-      captchaUuid: '',
+   
       captchaUrl: ''
     }
   },
@@ -86,9 +86,9 @@ export default {
   },
   methods: {
     fetchCaptcha() {
-      this.captchaUuid = Date.now().toString()
+      this.captchaId = Date.now().toString()
 
-      Api.user.getCaptcha(this.captchaUuid, (res) => {
+      Api.user.getCaptcha(this.captchaId, (res) => {
         if (res.status === 200) {
           const blob = new Blob([res.data], {type: res.data.type});
           this.captchaUrl = URL.createObjectURL(blob);
@@ -101,7 +101,7 @@ export default {
     },
 
     async login() {
-      if (!this.form.username.trim()) {  // 替换isNull校验
+      if (!this.form.mobile.trim()) {  // 替换isNull校验
         showDanger('用户名不能为空')
         return
       }
@@ -114,7 +114,7 @@ export default {
         return
       }
 
-      Api.user.login(this.form, ({data}) => {
+      Api.user.login(this.form,uuid, ({data}) => {
         showSuccess('登陆成功！')
         goToPage('/home')
       })

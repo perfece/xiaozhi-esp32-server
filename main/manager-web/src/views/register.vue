@@ -24,7 +24,7 @@
             <!-- 用户名输入框 -->
             <div class="input-box">
               <img src="@/assets/login/username.png" alt="" class="input-icon"/>
-              <el-input v-model="form.username" placeholder="请输入用户名"/>
+              <el-input v-model="form.mobile" placeholder="请输入用户名"/>
             </div>
 
             <!-- 密码输入框 -->
@@ -91,11 +91,11 @@ export default {
   data() {
     return {
       form: {
-        username: '',
+        mobile: '',
         password: '',
         confirmPassword: '',
         captcha: '',
-        uuid: ''
+        captchaId: ''
       },
       captchaUrl: ''
     }
@@ -106,8 +106,8 @@ export default {
   methods: {
     // 复用验证码获取方法
     fetchCaptcha() {
-      this.form.uuid = Date.now().toString()
-      Api.user.getCaptcha(this.form.uuid, (res) => {
+      this.form.captchaId = Date.now().toString()
+      Api.user.getCaptcha(this.form.captchaId, (res) => {
         if (res.status === 200) {
           const blob = new Blob([res.data], {type: res.data.type});
           this.captchaUrl = URL.createObjectURL(blob);
@@ -121,7 +121,7 @@ export default {
 
     // 注册逻辑
     register() {
-      if (!this.form.username.trim()) {
+      if (!this.form.mobile.trim()) {
         showDanger('用户名不能为空')
         return
       }
