@@ -76,7 +76,6 @@ export default {
     },
     // 获取验证码
     getCaptcha(uuid, callback) {
-    
         RequestService.sendRequest()
             .url(`${getServiceUrl()}/api/v1/user/captcha?uuid=${uuid}`)
             .method('GET')
