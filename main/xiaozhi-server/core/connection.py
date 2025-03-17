@@ -589,7 +589,7 @@ class ConnectionHandler:
             self.logger.bind(tag=TAG).error(f"Chat and close error: {str(e)}")
     async def _store_device_info(self, auth_code: str) -> bool:
         """存储设备信息到Redis（封装方法）"""
-        redis_key = f"device:{auth_code}"
+        redis_key = f"sys:device:captcha:{auth_code}"
         device_info = {
             **dict(self.headers),
             'timestamp': int(time.time()),
