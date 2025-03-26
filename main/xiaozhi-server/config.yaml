@@ -516,6 +516,16 @@ TTS:
       # Authorization: Bearer xxxx
     format: wav # 接口返回的音频格式
     output_dir: tmp/
+  SherpaTTS:
+    # 使用sherpa-onnx提供的轻量级本地TTS方案
+    # 修改repo_id和speaker更换模型和音色，会自动从huggingface下载，确保网络通畅
+    # 模型列表可以参考：https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models
+    type: sherpa_onnx_local
+    model_dir: models/sherpa_onnx_tts # 模型本地目录
+    model_name: "vits-zh-hf-theresa" # 音色模型
+    speaker: 0 # 音色id   vits默认0
+    speed: 0.8 # 语速
+    output_dir: tmp/
 # 模块测试配置
 module_test:
   test_sentences:  # 自定义测试语句
