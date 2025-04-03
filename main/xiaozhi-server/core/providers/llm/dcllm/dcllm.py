@@ -17,24 +17,28 @@ class LLMProvider(LLMProviderBase):
         try:
             # 取最后一条用户消息
             last_msg = next(m for m in reversed(dialogue) if m["role"] == "user")
-            print(f"-->kb_name:{self.kb_name}")
+            logger.bind(tag=TAG).info(f"-->kb_name: {self.kb_name}")
             query = last_msg.get('content', '').translate(str.maketrans('', '', '。？！'))
-            print(f"-->query:{query}")
+            logger.bind(tag=TAG).info(f"-->query:{query}")
+            request_json = {
+                "query": query,
+                "knowledge_base_name": self.kb_name,
+                "top_k": 5,
+                "score_threshold": 1,
+                "prompt_name": "chat_robot",
+                "stream": True,
+                "temperature": 1,
+                "history": []
+            }
             # 发起流式请求
             with requests.post(
                     f"{self.base_url}",
                     headers={"Authorization": f"Bearer {self.api_key}","Content-Type": "application/json",
                             "Accept": "application/json"},
-                    json={
-                        "query": query,
-                        "knowledge_base_name": self.kb_name,
-                        "top_k": 5,
-                        "score_threshold": 1,
-                        "prompt_name": "chat_robot",
-                        "stream": True,
-                        "temperature": 1,
-                        "history": []
-                    }
+                    json=request_json,
+                    stream=True,
+                    timeout=60
+
             ) as r:
                 for line in r.iter_lines():
                     if line:

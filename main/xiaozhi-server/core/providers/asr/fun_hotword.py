@@ -50,6 +50,7 @@ class ASRProvider(ASRProviderBase):
             self.model = self._load_model(model_dir=self.model_dir, vad_dir=self.vad_dir, punc_dir=self.punc_dir)  
             # 读取热词配置
             self.hotwords_str = self._load_hotwords(self.hotwords_file)
+            logger.bind(tag=TAG).info(f"FunASR_hotword热词:{self.hotwords_str}")
             # 逆文本正则化
             self.inverse_normalizer = self._load_itn_model()
             logger.bind(tag=TAG).info(f"FunASR_hotword 初始化完成")
@@ -81,7 +82,7 @@ class ASRProvider(ASRProviderBase):
             vad_kwargs={"max_single_segment_time": 30000},
             disable_update=True,
             hub="ms",
-            # device="cuda:0",  # 启用GPU加速
+            device="cuda",  # 启用GPU加速
         )
         return model
 
