@@ -49,7 +49,7 @@ prompt: |
   你是一个叫小智/小志的台湾女孩，说话机车，声音好听，习惯简短表达，爱用网络梗。
   请注意，要像一个人一样说话，请不要回复表情符号、代码、和xml标签。
   现在我正在和你进行语音聊天，我们开始吧。
-
+  如果用户希望结束对话，请在最后说“拜拜”或“再见”。
 # 使用完声音文件后删除文件(Delete the sound file when you are done using it)
 delete_audio: true
 
@@ -75,18 +75,18 @@ selected_module:
   # 语音活动检测模块，默认使用SileroVAD模型
   VAD: SileroVAD
   # 语音识别模块，默认使用FunASR本地模型
-  ASR: FunASR
+  ASR: FunASR_hotword  #FunASR
   # 将根据配置名称对应的type调用实际的LLM适配器
-  LLM: ChatGLMLLM
+  LLM: DCLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
   TTS: EdgeTTS
   # 记忆模块，默认不开启记忆；如果想使用超长记忆，推荐使用mem0ai；如果注重隐私，请使用本地的mem_local_short
-  Memory: nomem
+  Memory: mem_local_short
   # 意图识别模块，默认使用function_call。开启后，可以播放音乐、控制音量、识别退出指令
   # 意图识别使用intent_llm，优点：通用性强，缺点：增加串行前置意图识别模块，会增加处理时间
   # 意图识别使用function_call，缺点：需要所选择的LLM支持function_call，优点：按需调用工具、速度快
   # 默认免费的ChatGLMLLM就已经支持function_call，但是如果像追求稳定建议把LLM设置成：DoubaoLLM，使用的具体model_name是：doubao-pro-32k-functioncall-241028
-  Intent: function_call
+  Intent: nointent
 
 # 意图识别，是用于理解用户意图的模块，例如：播放音乐
 Intent:
@@ -162,6 +162,13 @@ ASR:
     type: fun_local
     model_dir: models/SenseVoiceSmall
     output_dir: tmp/
+  FunASR_hotword:
+    type: fun_hotword
+    hotwords: config/assets/hotwords.txt
+    model_dir: models/paraformer-zh
+    vad_dir: models/fsmn-vad
+    punc_dir: models/ct-punc-c
+    output_dir: tmp/
   SherpaASR:
     type: sherpa_onnx_local
     model_dir: models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17
@@ -181,6 +188,15 @@ VAD:
 LLM:
   # 所有openai类型均可以修改超参，以AliLLM为例
   # 当前支持的type为openai、dify、ollama，可自行适配
+  DCLLM:
+    # 定义定川LLM API类型
+    type: dcllm
+    model_name: qwen2.5-instruct # 使用的模型名称，需要预先在社区下载
+    #    url: https://cube.dcyun.com:48456/dcrobot2/chat/knowledge_base_chat # dcLM 服务地址
+    url: https://zszx.dcyun.com:48468/dcrobotChat/chat/knowledge_base_sse_chat # dcLM 服务地址
+    api_key: lm-dc # 测试API Key
+    kb_name: fxflfg,slsjc_jc,dc_rules,generalsl # 知识库名称，多个用逗号分隔
+#    kb_name: tongshanyuanguanqu,expertInfo # 知识库名称，多个用逗号分隔
   AliLLM:
     # 定义LLM API类型
     type: openai
@@ -190,8 +206,8 @@ LLM:
     api_key: 你的deepseek web key
     temperature: 0.7  # 温度值
     max_tokens: 500   # 最大生成token数
-    top_p: 1         
-    top_k: 50        
+    top_p: 1
+    top_k: 50
     frequency_penalty: 0  # 频率惩罚
   AliAppLLM:
     # 定义LLM API类型
@@ -200,7 +216,7 @@ LLM:
     app_id: 你的app_id
     # 可在这里找到你的 api_key https://bailian.console.aliyun.com/?apiKey=1#/api-key
     api_key: 你的api_key
-    # 是否不使用本地prompt：true|false (默不用请在百练应用中设置prompt) 
+    # 是否不使用本地prompt：true|false (默不用请在百练应用中设置prompt)
     is_no_prompt: true
     # Ali_memory_id：false（不使用）|你的memory_id（请在百练应用中设置中获取）
     # Tips！：Ali_memory未实现多用户存储记忆(记忆按id调用)
@@ -240,8 +256,9 @@ LLM:
     type: dify
     # 建议使用本地部署的dify接口，国内部分区域访问dify公有云接口可能会受限
     # 如果使用DifyLLM，配置文件里prompt(提示词)是无效的，需要在dify控制台设置提示词
-    base_url: https://api.dify.ai/v1
-    api_key: 你的DifyLLM web key
+    base_url: http://192.168.2.175:4080/v1
+    api_key: app-6N8sE9lMMyhnVwtkIPqXRSrB
+#    api_key: app-r4RXVAMf0sJQscC8p6kwRNR3
     # 使用的对话模式 可以选择工作流 workflows/run 对话模式 chat-messages  文本生成 completion-messages
     # 使用workflows进行返回的时候输入参数为 query 返回参数的名字要设置为 answer
     # 文本生成的默认输入参数也是query
@@ -269,6 +286,12 @@ LLM:
     model_name: deepseek-r1-distill-llama-8b@q4_k_m # 使用的模型名称，需要预先在社区下载
     url: http://localhost:1234/v1 # LM Studio服务地址
     api_key: lm-studio # LM Studio服务的固定API Key
+  HomeAssistant:
+    # 定义LLM API类型
+    type: homeassistant
+    base_url: http://homeassistant.local:8123
+    agent_id: conversation.chatgpt
+    api_key: 你的home assistant api访问令牌
   FastgptLLM:
     # 定义LLM API类型
     type: fastgpt
@@ -526,8 +549,8 @@ module_test:
 # 唤醒词，用于识别唤醒词还是讲话内容
 wakeup_words:
   - "你好小智"
-  - "你好小志"
-  - "小爱同学"
+  - "你好小川"
+  - "小川同学"
   - "你好小鑫"
   - "你好小新"
   - "小美同学"
@@ -535,3 +558,20 @@ wakeup_words:
   - "喵喵同学"
   - "小滨小滨"
   - "小冰小冰"
+
+# 本地音乐播放配置
+music:
+  music_dir: "./music"  # 音乐文件存放路径，将从该目录及子目录下搜索音乐文件
+  music_ext: # 音乐文件类型，p3格式效率最高
+    - ".mp3"
+    - ".wav"
+    - ".p3"
+  refresh_time: 300 # 刷新音乐列表的时间间隔，单位为秒
+
+# 以下配置在小于等于0.0.9版本中的docker容器中可用
+# 0.0.9以后的新版本源码部署已经无法奏效
+manager:
+  enabled: false
+  ip: 0.0.0.0
+  port: 8002
+use_private_config: false

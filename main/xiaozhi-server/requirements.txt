@@ -23,3 +23,20 @@ bs4==0.0.2
 modelscope==1.23.2
 sherpa_onnx==1.11.0
 cnlunar==0.2.0
+
+mcp==1.4.1
+# windows use `conda install -y -c conda-forge pynini=2.1.5 && pip install WeTextProcessing==1.0.3`
+WeTextProcessing==1.0.3; sys_platform != "win32"
+
+
+tomli
+fonttools
+pillow
+matplotlib
+opencv-python
+Shapely
+fonttools
+pyclipper
+python-docx
+rapidfuzz
+shapely
