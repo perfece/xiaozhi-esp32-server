@@ -87,7 +87,7 @@ selected_module:
   # 语音识别模块，默认使用FunASR本地模型
   ASR: FunASR_hotword  #FunASR
   # 将根据配置名称对应的type调用实际的LLM适配器
-  LLM: DCLLM
+  LLM: DCLLM #ChatGLMLLM #DCLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
   TTS: EdgeTTS
   # 记忆模块，默认不开启记忆；如果想使用超长记忆，推荐使用mem0ai；如果注重隐私，请使用本地的mem_local_short
@@ -135,7 +135,9 @@ plugins:
   # 这个密钥是项目共用的key，用多了可能会被限制
   # 想稳定一点就自行申请替换，每天有1000次免费调用
   # 申请地址：https://console.qweather.com/#/apps/create-key/over
-  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
+  get_weather: { "api_key": "d5e4f8a878ff4d36ba6bef09df558623", "default_location": "广州" }
+#  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
+
   # 获取新闻插件的配置，这里根据需要的新闻类型传入对应的url链接，默认支持社会、科技、财经新闻
   # 更多类型的新闻列表查看 https://www.chinanews.com.cn/rss/
   get_news:
@@ -188,6 +190,12 @@ ASR:
     type: sherpa_onnx_local
     model_dir: models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17
     output_dir: tmp/
+  DcFunASR:
+    type: dcasr
+    asr_url: wss://cubedev.dcyun.com:48473/voice/
+    appid: empty
+    access_token: empty
+    output_dir: tmp/
   DoubaoASR:
     # 可以在这里申请相关Key等信息
     # https://console.volcengine.com/speech/app
@@ -220,7 +228,7 @@ LLM:
     #    url: https://cube.dcyun.com:48456/dcrobot2/chat/knowledge_base_chat # dcLM 服务地址
     url: https://zszx.dcyun.com:48468/dcrobotChat/chat/knowledge_base_sse_chat # dcLM 服务地址
     api_key: lm-dc # 测试API Key
-    kb_name: fxflfg,slsjc_jc,dc_rules,generalsl # 知识库名称，多个用逗号分隔
+    kb_name: fxflfg,slsjc_jc,dc_rules,generalsl # 知识库名称，多个用逗号分隔：山洪知识库、水利数据仓工程基础信息库、定川规章制度库、水利通用知识库
 #    kb_name: tongshanyuanguanqu,expertInfo # 知识库名称，多个用逗号分隔
   AliLLM:
     # 定义LLM API类型
@@ -270,7 +278,7 @@ LLM:
     # 可在这里找到你的api key https://bigmodel.cn/usercenter/proj-mgmt/apikeys
     model_name: glm-4-flash
     url: https://open.bigmodel.cn/api/paas/v4/
-    api_key: 你的chat-glm web key
+    api_key: b59b66cb382af779258908f90c6a5c12.WEl1c0O2WySoyWwE
   OllamaLLM:
     # 定义LLM API类型
     type: ollama
