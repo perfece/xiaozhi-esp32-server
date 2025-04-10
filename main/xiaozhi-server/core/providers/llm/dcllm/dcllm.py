@@ -23,8 +23,8 @@ class LLMProvider(LLMProviderBase):
             request_json = {
                 "query": query,
                 "knowledge_base_name": self.kb_name,
-                "top_k": 5,
-                "score_threshold": 1,
+                "top_k": 3,
+                "score_threshold": 0.5,
                 "prompt_name": "chat_robot",
                 "stream": True,
                 "temperature": 1,

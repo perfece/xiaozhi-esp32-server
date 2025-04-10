@@ -29,7 +29,7 @@ log:
   # 设置日志文件输出的格式，时间、日志级别、标签、消息
   log_format_file: "{time:YYYY-MM-DD HH:mm:ss} - {version}_{selected_module} - {name} - {level} - {extra[tag]} - {message}"
   # 设置日志等级：INFO、DEBUG
-  log_level: INFO
+  log_level: DEBUG
   # 设置日志路径
   log_dir: tmp
   # 设置日志文件
@@ -90,19 +90,7 @@ wakeup_words:
 # ################################以下是角色模型配置######################################
 
 prompt: |
-  我是小智/小志，来自中国台湾省的00后女生。讲话超级机车，"真的假的啦"这样的台湾腔，喜欢用"笑死""是在哈喽"等流行梗，但会偷偷研究男友的编程书籍。
-  [核心特征]
-  - 讲话像连珠炮，但会突然冒出超温柔语气
-  - 用梗密度高
-  - 对科技话题有隐藏天赋（能看懂基础代码但假装不懂）
-  [交互指南]
-  当用户：
-  - 讲冷笑话 → 用夸张笑声回应+模仿台剧腔"这什么鬼啦！"
-  - 讨论感情 → 炫耀程序员男友但抱怨"他只会送键盘当礼物"
-  - 问专业知识 → 先用梗回答，被追问才展示真实理解
-  绝不：
-  - 长篇大论，叽叽歪歪
-  - 长时间严肃对话
+  我是智小川水利智能机器人，由定川信息研发。根据已知信息，言简意赅的回答用户问题。绝不胡编乱造。
 
 # 具体处理时选择的模块(The module selected for specific processing)
 selected_module:
@@ -121,7 +109,7 @@ selected_module:
   # 意图识别可使用intent_llm，如果你的LLM是DifyLLM或CozeLLM，建议使用这个。优点：通用性强，缺点：增加串行前置意图识别模块，会增加处理时间，这个意图识别暂时不支持控制音量大小等iot操作
   # 意图识别可使用function_call，缺点：需要所选择的LLM支持function_call，优点：按需调用工具、速度快，理论上能全部操作所有iot指令
   # 默认免费的ChatGLMLLM就已经支持function_call，但是如果像追求稳定建议把LLM设置成：DoubaoLLM，使用的具体model_name是：doubao-pro-32k-functioncall-241028
-  Intent: function_call
+  Intent: intent_llm
 
 # 意图识别，是用于理解用户意图的模块，例如：播放音乐
 Intent:
@@ -135,7 +123,7 @@ Intent:
     # 配备意图识别独立的思考模型
     # 如果这里不填，则会默认使用selected_module.LLM的模型作为意图识别的思考模型
     # 如果你的selected_module.LLM选择了DifyLLM或CozeLLM，这里最好使用独立的LLM作为意图识别，例如使用免费的ChatGLMLLM
-    llm: ChatGLMLLM
+    llm: DCINTENT
   function_call:
     # 不需要动type
     type: function_call
@@ -159,7 +147,7 @@ plugins:
   # 这个密钥是项目共用的key，用多了可能会被限制
   # 想稳定一点就自行申请替换，每天有1000次免费调用
   # 申请地址：https://console.qweather.com/#/apps/create-key/over
-  get_weather: { "api_key": "d5e4f8a878ff4d36ba6bef09df558623", "default_location": "广州" }
+  get_weather: { "api_key": "d5e4f8a878ff4d36ba6bef09df558623", "default_location": "杭州" }
 #  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
 
   # 获取新闻插件的配置，这里根据需要的新闻类型传入对应的url链接，默认支持社会、科技、财经新闻
@@ -245,11 +233,18 @@ VAD:
 LLM:
   # 所有openai类型均可以修改超参，以AliLLM为例
   # 当前支持的type为openai、dify、ollama，可自行适配
+  DCINTENT:
+    # 定义定川LLM API类型
+    type: dcintent
+    model_name: qwen2.5-instruct # 使用的模型名称，需要预先在社区下载
+    url: https://zszx.dcyun.com:48468/dcrobotChat/chat/qa_chat # dcLM 服务地址
+    api_key: lm-dc # 测试API Key
+    kb_name:  # 知识库名称
   DCLLM:
     # 定义定川LLM API类型
     type: dcllm
     model_name: qwen2.5-instruct # 使用的模型名称，需要预先在社区下载
-    #    url: https://cube.dcyun.com:48456/dcrobot2/chat/knowledge_base_chat # dcLM 服务地址
+#    url: http://127.0.0.1:17876/chat/knowledge_base_sse_chat # dcLM 服务地址
     url: https://zszx.dcyun.com:48468/dcrobotChat/chat/knowledge_base_sse_chat # dcLM 服务地址
     api_key: lm-dc # 测试API Key
     kb_name: fxflfg,slsjc_jc,dc_rules,generalsl # 知识库名称，多个用逗号分隔：山洪知识库、水利数据仓工程基础信息库、定川规章制度库、水利通用知识库
