@@ -1070,8 +1070,40 @@ async function sendHelloMessage() {
 
     try {
         // 设置设备信息
+//        const helloMessage = {
+//            type: 'iot',
+//            device_id: 'web_test_device',
+//            device_name: 'Web测试设备',
+//            device_mac: '00:11:22:33:44:55',
+//            token: 'your-token1' // 使用config.yaml中配置的token
+//        };
         const helloMessage = {
-            type: 'hello',
+            session_id:'empty'
+            type: 'iot',
+            update:true,
+            descriptors: [
+                            {
+                                name: "Speaker",
+                                description: "扬声器",
+                                properties: {
+                                    volume: {
+                                        description: "当前音量值",
+                                        type: "number"
+                                    }
+                                },
+                                methods: {
+                                    SetVolume: {
+                                        description: "设置音量",
+                                        parameters: {
+                                            volume: {
+                                                description: "0到100之间的整数",
+                                                type: "number"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ],
             device_id: 'web_test_device',
             device_name: 'Web测试设备',
             device_mac: '00:11:22:33:44:55',

@@ -269,8 +269,8 @@ def register_device_type(descriptor):
 
 # 用于接受前端设备推送的搜索iot描述
 async def handleIotDescriptors(conn, descriptors):
-    if not conn.use_function_call_mode:
-        return
+    # if not conn.use_function_call_mode:
+    #     return
     wait_max_time = 5
     while conn.func_handler is None or not conn.func_handler.finish_init:
         await asyncio.sleep(1)
@@ -375,9 +375,7 @@ async def send_iot_conn(conn, name, method_name, parameters):
             for method in value.methods:
                 # 找到了方法
                 if method["name"] == method_name:
-                    await conn.websocket.send(
-                        json.dumps(
-                            {
+                    send_cmd = {
                                 "type": "iot",
                                 "commands": [
                                     {
@@ -387,7 +385,9 @@ async def send_iot_conn(conn, name, method_name, parameters):
                                     }
                                 ],
                             }
-                        )
+                    logger.bind(tag=TAG).info(f"发送物联网指令: {send_cmd}")
+                    await conn.websocket.send(
+                        json.dumps(send_cmd)
                     )
                     return
     logger.bind(tag=TAG).error(f"未找到方法{method_name}")
