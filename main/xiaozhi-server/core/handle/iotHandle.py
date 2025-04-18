@@ -375,9 +375,7 @@ async def send_iot_conn(conn, name, method_name, parameters):
             for method in value.methods:
                 # 找到了方法
                 if method["name"] == method_name:
-                    await conn.websocket.send(
-                        json.dumps(
-                            {
+                    send_cmd = {
                                 "type": "iot",
                                 "commands": [
                                     {
@@ -387,7 +385,9 @@ async def send_iot_conn(conn, name, method_name, parameters):
                                     }
                                 ],
                             }
-                        )
+                    logger.bind(tag=TAG).info(f"发送物联网指令: {send_cmd}")
+                    await conn.websocket.send(
+                        json.dumps(send_cmd)
                     )
                     return
     logger.bind(tag=TAG).error(f"未找到方法{method_name}")

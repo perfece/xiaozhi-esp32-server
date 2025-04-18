@@ -27,8 +27,8 @@ async def wait_for_exit():
 
 
 async def main():
-    check_config_file()
-    check_ffmpeg_installed()
+    # check_config_file()
+    # check_ffmpeg_installed()
     config = load_config()
 
     # 启动 WebSocket 服务器
