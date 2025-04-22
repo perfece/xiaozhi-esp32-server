@@ -79,7 +79,7 @@ class LLMProvider(LLMProviderBase):
     def __init__(self, config):
         self.api_key = config["api_key"]
         self.base_url = config.get("url")
-        self.kb_name = config.get("kb_name")
+        self.kb_name = '' #config.get("kb_name")
 
     def response(self, session_id, dialogue):
         try:
@@ -116,20 +116,20 @@ class LLMProvider(LLMProviderBase):
                                     if 'docs' in data:
                                         break
                                     if "choices" in data:
-                                        print(data["choices"][0]["message"]["content"], end="", flush=True)
+                                        print(f'-->dc intent llm answer:{data["choices"][0]["message"]["content"]}', end="", flush=True)
                                         yield data["choices"][0]["message"]["content"]
                                 else:
                                     if "answer" in data:
-                                        print(data["answer"], end="", flush=True)
+                                        print(f'-->dc intent llm answer:{data["choices"][0]["message"]["content"]}', end="", flush=True)
                                         yield data["answer"]
 
                         except json.JSONDecodeError as e:
-                            print("-->llm answer JSONDecodeError")
+                            print("-->dc intent llm answer JSONDecodeError")
                             continue
                         except Exception as e:
-                            print(f"-->llm answer Error:{e}")
+                            print(f"-->dc intent llm answer Error:{e}")
                             continue
 
         except Exception as e:
-            logger.bind(tag=TAG).error(f"Error in response generation: {e}")
+            logger.bind(tag=TAG).error(f"-->dc intent llm Error in response generation: {e}")
             yield "【服务响应异常】"

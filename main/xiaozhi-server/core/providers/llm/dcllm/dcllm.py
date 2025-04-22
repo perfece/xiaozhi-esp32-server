@@ -28,6 +28,7 @@ class LLMProvider(LLMProviderBase):
                 "prompt_name": "chat_robot",
                 "stream": True,
                 "temperature": 1,
+                "use_reg": False,
                 "history": []
             }
             # 发起流式请求

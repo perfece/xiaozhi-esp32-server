@@ -93,8 +93,8 @@ async def process_intent_result(conn, intent_result, original_text):
                 "id": str(uuid.uuid4().hex),
                 "arguments": function_args,
             }
-
-            await send_stt_message(conn, original_text)
+            # logger.bind(tag=TAG).info(f"-->识别文本 process_intent_result: {original_text}")
+            # await send_stt_message(conn, original_text)
 
             # 使用executor执行函数调用和结果处理
             def process_function_call():

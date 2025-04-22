@@ -113,7 +113,7 @@ def get_weather(conn, location: str = None, lang: str = "zh_CN"):
         return ActionResponse(Action.REQLLM, None, "请求失败")
 
     city_name, current_abstract, current_basic, temps_list = parse_weather_info(soup)
-    weather_report = f"据下列数据，用{lang}回应用户的查询天气请求：\n{city_name}未来7天天气:\n"
+    weather_report = f"根据下列数据，用{lang}回应用户的查询天气请求：\n{city_name}未来7天天气:\n"
     for i, (date, weather, high, low) in enumerate(temps_list):
         if high and low:
             weather_report += f"{date}: {low}到{high}, {weather}\n"
@@ -124,4 +124,4 @@ def get_weather(conn, location: str = None, lang: str = "zh_CN"):
         "参数为0的值不需要报告给用户，每次都报告体感温度，根据语境选择合适的参数内容告知用户，并对参数给出相应评价)"
     )
 
-    return ActionResponse(Action.REQLLM, weather_report, current_abstract)
+    return ActionResponse(Action.REQLLM, weather_report, city_name+current_abstract)

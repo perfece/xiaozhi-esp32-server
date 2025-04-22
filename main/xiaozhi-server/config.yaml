@@ -29,7 +29,7 @@ log:
   # 设置日志文件输出的格式，时间、日志级别、标签、消息
   log_format_file: "{time:YYYY-MM-DD HH:mm:ss} - {version}_{selected_module} - {name} - {level} - {extra[tag]} - {message}"
   # 设置日志等级：INFO、DEBUG
-  log_level: DEBUG
+  log_level: INFO
   # 设置日志路径
   log_dir: tmp
   # 设置日志文件
@@ -92,7 +92,9 @@ plugins:
   # 这个密钥是项目共用的key，用多了可能会被限制
   # 想稳定一点就自行申请替换，每天有1000次免费调用
   # 申请地址：https://console.qweather.com/#/apps/create-key/over
-  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
+  get_weather: { "api_key": "d5e4f8a878ff4d36ba6bef09df558623", "default_location": "杭州" }
+#  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
+
   # 获取新闻插件的配置，这里根据需要的新闻类型传入对应的url链接，默认支持社会、科技、财经新闻
   # 更多类型的新闻列表查看 https://www.chinanews.com.cn/rss/
   get_news:
@@ -126,11 +128,11 @@ selected_module:
   # 语音活动检测模块，默认使用SileroVAD模型
   VAD: SileroVAD
   # 语音识别模块，默认使用FunASR本地模型
-  ASR: FunASR_hotword  #FunASR
+  ASR: FunASR_hotword   # FunASR_hotword
   # 将根据配置名称对应的type调用实际的LLM适配器
   LLM: DCLLM #ChatGLMLLM #DCLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
-  TTS: EdgeTTS
+  TTS: CosyVoiceSiliconflow #EdgeTTS
   # 记忆模块，默认不开启记忆；如果想使用超长记忆，推荐使用mem0ai；如果注重隐私，请使用本地的mem_local_short
   Memory: nomem
   # 意图识别模块开启后，可以播放音乐、控制音量、识别退出指令。
@@ -138,7 +140,7 @@ selected_module:
   # 意图识别可使用intent_llm，如果你的LLM是DifyLLM或CozeLLM，建议使用这个。优点：通用性强，缺点：增加串行前置意图识别模块，会增加处理时间，这个意图识别暂时不支持控制音量大小等iot操作
   # 意图识别可使用function_call，缺点：需要所选择的LLM支持function_call，优点：按需调用工具、速度快，理论上能全部操作所有iot指令
   # 默认免费的ChatGLMLLM就已经支持function_call，但是如果像追求稳定建议把LLM设置成：DoubaoLLM，使用的具体model_name是：doubao-pro-32k-functioncall-241028
-  Intent: intent_llm
+  Intent: intent_llm #function_call #intent_llm
 
 # 意图识别，是用于理解用户意图的模块，例如：播放音乐
 Intent:
@@ -169,37 +171,6 @@ Intent:
       #- hass_get_state
       #- hass_set_state
       #- hass_play_music
-
-# 插件的基础配置
-plugins:
-  # 获取天气插件的配置，这里填写你的api_key
-  # 这个密钥是项目共用的key，用多了可能会被限制
-  # 想稳定一点就自行申请替换，每天有1000次免费调用
-  # 申请地址：https://console.qweather.com/#/apps/create-key/over
-  get_weather: { "api_key": "d5e4f8a878ff4d36ba6bef09df558623", "default_location": "杭州" }
-#  get_weather: { "api_key": "a861d0d5e7bf4ee1a83d9a9e4f96d4da", "default_location": "广州" }
-
-  # 获取新闻插件的配置，这里根据需要的新闻类型传入对应的url链接，默认支持社会、科技、财经新闻
-  # 更多类型的新闻列表查看 https://www.chinanews.com.cn/rss/
-  get_news:
-    default_rss_url: "https://www.chinanews.com.cn/rss/society.xml"
-    category_urls:
-      society: "https://www.chinanews.com.cn/rss/society.xml"
-      world: "https://www.chinanews.com.cn/rss/world.xml"
-      finance: "https://www.chinanews.com.cn/rss/finance.xml"
-  home_assistant:
-    devices:
-      - 客厅,玩具灯,switch.cuco_cn_460494544_cp1_on_p_2_1
-      - 卧室,台灯,switch.iot_cn_831898993_socn1_on_p_2_1
-    base_url: http://homeassistant.local:8123
-    api_key: 你的home assistant api访问令牌
-  play_music:
-    music_dir: "./music"  # 音乐文件存放路径，将从该目录及子目录下搜索音乐文件
-    music_ext: # 音乐文件类型，p3格式效率最高
-      - ".mp3"
-      - ".wav"
-      - ".p3"
-    refresh_time: 300 # 刷新音乐列表的时间间隔，单位为秒
 
 
 Memory:
@@ -269,7 +240,7 @@ LLM:
     model_name: qwen2.5-instruct # 使用的模型名称，需要预先在社区下载
     url: https://zszx.dcyun.com:48468/dcrobotChat/chat/qa_chat # dcLM 服务地址
     api_key: lm-dc # 测试API Key
-    kb_name:  # 知识库名称
+    kb_name:   # 知识库名称
   DCLLM:
     # 定义定川LLM API类型
     type: dcllm
@@ -277,7 +248,7 @@ LLM:
 #    url: http://127.0.0.1:17876/chat/knowledge_base_sse_chat # dcLM 服务地址
     url: https://zszx.dcyun.com:48468/dcrobotChat/chat/knowledge_base_sse_chat # dcLM 服务地址
     api_key: lm-dc # 测试API Key
-    kb_name: fxflfg,slsjc_jc,dc_rules,generalsl # 知识库名称，多个用逗号分隔：山洪知识库、水利数据仓工程基础信息库、定川规章制度库、水利通用知识库
+    kb_name: fxflfg,slsjc_jc,dc_rules,rescontrolplan,tongshanyuanguanqu,generalsl # 知识库名称，多个用逗号分隔：山洪知识库、水利数据仓工程基础信息库、定川规章制度库、水库调度方案、铜山源灌区、水利通用知识库
 #    kb_name: tongshanyuanguanqu,expertInfo # 知识库名称，多个用逗号分隔
   AliLLM:
     # 定义LLM API类型
@@ -420,9 +391,9 @@ TTS:
     # 硅基流动TTS
     # token申请地址 https://cloud.siliconflow.cn/account/ak
     model: FunAudioLLM/CosyVoice2-0.5B
-    voice: FunAudioLLM/CosyVoice2-0.5B:alex
+    voice: FunAudioLLM/CosyVoice2-0.5B:anna
     output_dir: tmp/
-    access_token: 你的硅基流动API密钥
+    access_token: sk-eaoxbgncjdmhonhziujseatglidvrshjgnqjwksfmikvvrvw
     response_format: wav
   CozeCnTTS:
     type: cozecn
