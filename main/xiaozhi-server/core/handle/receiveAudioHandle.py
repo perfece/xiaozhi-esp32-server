@@ -38,6 +38,7 @@ async def handleAudioMessage(conn, audio):
         else:
             text, _ = await conn.asr.speech_to_text(conn.asr_audio, conn.session_id)
             logger.bind(tag=TAG).info(f"识别文本: {text}")
+            await send_stt_message(conn, f"{text}")
             text_len, _ = remove_punctuation_and_length(text)
             if text_len > 0:
                 await startToChat(conn, text)
@@ -69,7 +70,8 @@ async def startToChat(conn, text):
         return
 
     # 意图未被处理，继续常规聊天流程
-    await send_stt_message(conn, text)
+    logger.bind(tag=TAG).info(f"识别文本1: {text}")
+    # await send_stt_message(conn, text)
     if conn.use_function_call_mode:
         # 使用支持function calling的聊天方法
         conn.executor.submit(conn.chat_with_function_calling, text)

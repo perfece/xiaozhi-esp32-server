@@ -38,7 +38,9 @@ HEADERS = {
         '(KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36'
     )
 }
-
+'''
+免费额度	每月50000次 https://blog.qweather.com/announce/free-subscription-service-update/
+'''
 # 天气代码 https://dev.qweather.com/docs/resource/icons/#weather-icons
 WEATHER_CODE_MAP = {
     "100": "晴", "101": "多云", "102": "少云", "103": "晴间多云", "104": "阴",
@@ -58,8 +60,10 @@ WEATHER_CODE_MAP = {
 }
 
 def fetch_city_info(location, api_key):
-    url = f"https://geoapi.qweather.com/v2/city/lookup?key={api_key}&location={location}&lang=zh"
+    # url = f"https://geoapi.qweather.com/v2/city/lookup?key={api_key}&location={location}&lang=zh"
+    url = f"https://np44u8ppvp.re.qweatherapi.com/geo/v2/city/lookup?key={api_key}&location={location}&lang=zh"
     response = requests.get(url, headers=HEADERS).json()
+    logger.info(f"-->获取城市信息: {url},return_code:{response.get('code')},response.json:{response}")
     return response.get('location', [])[0] if response.get('location') else None
 
 
@@ -120,4 +124,4 @@ def get_weather(conn, location: str = None, lang: str = "zh_CN"):
         "参数为0的值不需要报告给用户，每次都报告体感温度，根据语境选择合适的参数内容告知用户，并对参数给出相应评价)"
     )
 
-    return ActionResponse(Action.REQLLM, weather_report, None)
+    return ActionResponse(Action.REQLLM, weather_report, city_name+current_abstract)

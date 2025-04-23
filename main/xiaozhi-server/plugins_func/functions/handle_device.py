@@ -56,7 +56,7 @@ handle_device_function_desc = {
     "function": {
         "name": "handle_device",
         "description": (
-            "用户想要获取或者设置设备的音量/亮度大小，或者用户觉得声音/亮度过高或过低，或者用户想提高或降低音量/亮度。"
+            "iot设备控制意图，包括：1.用户想要获取或者设置设备的音量大小或者用户觉得声音过高或过低；2.设置闹钟或定时任务。"
             "比如用户说现在亮度多少，参数为：device_type:Screen,action:get。"
             "比如用户说设置音量为50，参数为：device_type:Speaker,action:set,value:50。"
             "比如用户说亮度太高了，参数为：device_type:Screen,action:lower。"

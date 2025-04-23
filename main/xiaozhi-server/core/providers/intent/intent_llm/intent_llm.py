@@ -1,5 +1,5 @@
 from typing import List, Dict
-from ..base import IntentProviderBase
+from core.providers.intent.base import IntentProviderBase
 from plugins_func.functions.play_music import initialize_music_handler
 from config.logger import setup_logging
 import re
@@ -41,6 +41,14 @@ class IntentProvider(IntentProviderBase):
             '2. 结束对话意图: {"function_call": {"name": "handle_exit_intent", "arguments": {"say_goodbye": "goodbye"}}}\n'
             '3. 获取当天日期时间: {"function_call": {"name": "get_time"}}\n'
             '4. 继续聊天意图: {"function_call": {"name": "continue_chat"}}\n'
+            '5. 获取天气意图: {"function_call": {"name": "get_weather", "arguments": {"location": "地名","lang":"返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN"}}}\n'
+            '6. 获取新闻意图: {"function_call": {"name": "get_news", "arguments": {"category": "新闻类别","detail":"默认为false","lang":"返回用户使用的语言code，默认zh_CN"}}}\n'
+            '7. 切换角色意图: {"function_call": {"name": "change_role", "arguments": {"role_name": "要切换的角色名字","role":"要切换的角色，可选的角色有：[机车女友,英语老师,好奇小男孩]"}}}\n'
+            '8. 设备控制意图: {"function_call": {"name": "handle_device", "arguments":｛"device_type":"设备类型，可选值：Speaker(音量),Screen(亮度)","action":"动作名称，可选值：get(获取),set(设置),raise(提高),lower(降低)","value":"值大小，可选值：0-100之间的整数"｝}}\n'
+            '9. 查询水雨情实时数据意图: {"function_call": {"name": "get_syq", "arguments": {"query": "用户问题"}}}\n'
+            # '9. 设置homeassistant里设备的状态意图: {"function_call": {"name": "hass_set_state","arguments":{"entity_id":"需要操作的设备id,homeassistant里的entity_id",'
+            # ' "state":{"type": "需要操作的动作,打开设备:turn_on,关闭设备:turn_off,增加亮度:brightness_up,降低亮度:brightness_down,设置亮度:brightness_value,增加>音量:,volume_up降低音量:volume_down,设置音量:volume_set,设备暂停:pause,设备继续:continue,静音/取消静音:volume_mute",'
+            # '"input":"只有在设置音量,设置亮度时候 才需要,有效值为1-100","is_muted":"只有在设置静音操作时才需要,设置静音的时候该值为true,取消静音时该值为false"}}}}\n'
             "\n"
             "注意:\n"
             '- 播放音乐：无歌名时，song_name设为"random"\n'
@@ -121,11 +129,16 @@ class IntentProvider(IntentProviderBase):
         # 构建用户最后一句话的提示
         msgStr = ""
 
-        # 只使用最后两句即可
-        if len(dialogue_history) >= 2:
-            # 保证最少有两句话的时候处理
-            msgStr += f"{dialogue_history[-2].role}: {dialogue_history[-2].content}\n"
-        msgStr += f"{dialogue_history[-1].role}: {dialogue_history[-1].content}\n"
+        # # 只使用最后两句即可
+        # if len(dialogue_history) >= 2:
+        #     # 保证最少有两句话的时候处理
+        #     msgStr += f"{dialogue_history[-2].role}: {dialogue_history[-2].content}\n"
+        # msgStr += f"{dialogue_history[-1].role}: {dialogue_history[-1].content}\n"
+
+        # 只使用最后一句即可
+        if len(dialogue_history) >= 1:
+            # 保证最少有一句话的时候处理
+            msgStr += f"{dialogue_history[-1].role}: {dialogue_history[-1].content}\n"
 
         msgStr += f"User: {text}\n"
         user_prompt = f"当前的对话如下：\n{msgStr}"
