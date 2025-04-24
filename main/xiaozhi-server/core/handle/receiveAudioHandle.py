@@ -4,10 +4,30 @@ from core.utils.util import remove_punctuation_and_length
 from core.handle.sendAudioHandle import send_stt_message
 from core.handle.intentHandler import handle_user_intent
 from core.utils.output_counter import check_device_output_limit
-
+import random
 TAG = __name__
 logger = setup_logging()
 
+def get_random_speak():
+    # 定义提示语列表
+    prompts = [
+        "请稍等，正在思考。",
+        "正在思考，请稍后。",
+        "正在处理中，请等待。",
+        "正在为您处理，马上就好。",
+        "请稍等，正在获取相关信息。",
+        "请稍候，正在处理您的请求。",
+        "正在为您查询，请稍等。",
+        "正在为您查找最佳答案。",
+        "已收到您的吩咐，请稍后。",
+        "请稍等片刻，正在处理您的问题。",
+        "请稍等，正在获取答案。",
+        "稍等一下下，马上就有答案啦。",
+    ]
+
+    # 随机选择一条提示语
+    random_speak = random.choice(prompts)
+    return random_speak
 
 async def handleAudioMessage(conn, audio):
     if not conn.asr_server_receive:
@@ -41,6 +61,14 @@ async def handleAudioMessage(conn, audio):
             await send_stt_message(conn, f"{text}")
             text_len, _ = remove_punctuation_and_length(text)
             if text_len > 0:
+                # 打招呼
+                segment_text = get_random_speak()
+                conn.recode_first_last_text(segment_text, 0)
+                future = conn.executor.submit(
+                    conn.speak_and_play, segment_text, 0
+                )
+                conn.tts_queue.put(future)
+
                 await startToChat(conn, text)
             else:
                 conn.asr_server_receive = True
@@ -71,6 +99,13 @@ async def startToChat(conn, text):
 
     # 意图未被处理，继续常规聊天流程
     logger.bind(tag=TAG).info(f"识别文本1: {text}")
+    # 打招呼
+    # segment_text = get_random_speak()
+    # conn.recode_first_last_text(segment_text, 0)
+    # future = conn.executor.submit(
+    #     conn.speak_and_play, segment_text, 0
+    # )
+    # conn.tts_queue.put(future)
     # await send_stt_message(conn, text)
     if conn.use_function_call_mode:
         # 使用支持function calling的聊天方法

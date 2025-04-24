@@ -48,7 +48,7 @@ enable_wakeup_words_response_cache: true
 # 开场是否回复唤醒词
 enable_greeting: true
 # 说完话是否开启提示音
-enable_stop_tts_notify: false
+enable_stop_tts_notify: true
 # 说完话是否开启提示音，音效地址
 stop_tts_notify_voice: "config/assets/tts_notify.mp3"
 
@@ -132,7 +132,7 @@ selected_module:
   # 将根据配置名称对应的type调用实际的LLM适配器
   LLM: DCLLM #ChatGLMLLM #DCLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
-  TTS: CosyVoiceSiliconflow #EdgeTTS
+  TTS: EdgeTTS #CosyVoiceSiliconflow #EdgeTTS
   # 记忆模块，默认不开启记忆；如果想使用超长记忆，推荐使用mem0ai；如果注重隐私，请使用本地的mem_local_short
   Memory: nomem
   # 意图识别模块开启后，可以播放音乐、控制音量、识别退出指令。
