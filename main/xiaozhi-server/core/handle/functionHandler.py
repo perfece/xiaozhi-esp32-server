@@ -98,5 +98,7 @@ class FunctionHandler:
                 )
         except Exception as e:
             logger.bind(tag=TAG).error(f"处理function call错误: {e}")
-
+            return ActionResponse(
+                action=Action.NOTFOUND, result="没有找到对应的函数", response=""
+            )
         return None

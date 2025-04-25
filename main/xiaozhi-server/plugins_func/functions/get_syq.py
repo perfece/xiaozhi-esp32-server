@@ -21,7 +21,12 @@ GET_SYQ_FUNCTION_DESC = {
             f"(注意区分，上述的“水位”是动态值，走此实时水雨情实时数据意图。与“校核水位”、“死水位”、“汛限水位”等静态水利工程属性是不同概念，而问到水利工程静态属性相关问题时不属于该意图，属于“continue_chat”继续聊天的意图；上述的雨量/降雨量查询场景跟天气没关系)"
 
         ),
-        "parameters": {"type": "object", "properties": {}, "required": []},
+        "parameters": {"type": "object", "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "用户问题"
+                }
+        }, "required": []},
     }
 }
 
@@ -89,10 +94,10 @@ def get_intent_by_reg(query):
 def get_syq(conn, query: str):
     resp = get_intent_by_reg(query)
     if not resp:
-        return ActionResponse(Action.REQLLM, "未查询到相关实时数据", "未查询到相关实时数据")
+        return ActionResponse(Action.RESPONSE, "未查询到相关实时数据", "未查询到相关实时数据")
     syq_resp = (
         f" {resp}\n"
         f"(直接给出答案)"
     )
 
-    return ActionResponse(Action.REQLLM, syq_resp, resp)
+    return ActionResponse(Action.RESPONSE, syq_resp, resp)

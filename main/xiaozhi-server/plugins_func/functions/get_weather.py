@@ -122,4 +122,4 @@ def get_weather(conn, location: str = None, lang: str = "zh_CN"):
         "参数为0的值不需要报告给用户，每次都报告体感温度，根据语境选择合适的参数内容告知用户，并对参数给出相应评价)"
     )
 
-    return ActionResponse(Action.REQLLM, weather_report, city_name+current_abstract)
+    return ActionResponse(Action.RESPONSE, weather_report, city_name+current_abstract)

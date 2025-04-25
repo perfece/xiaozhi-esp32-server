@@ -128,13 +128,13 @@ def get_news(conn, category: str = None, detail: bool = False, lang: str = "zh_C
         # 如果detail为True，获取上一条新闻的详细内容
         if detail and 'true' == detail:
             if not hasattr(conn, 'last_news_link') or not conn.last_news_link or 'link' not in conn.last_news_link:
-                return ActionResponse(Action.REQLLM, "抱歉，没有找到最近的新闻，请先获取一条新闻。", None)
+                return ActionResponse(Action.RESPONSE, "抱歉，没有找到最近的新闻，请先获取一条新闻。", None)
 
             link = conn.last_news_link.get('link')
             title = conn.last_news_link.get('title', '未知标题')
 
             if link == '#':
-                return ActionResponse(Action.REQLLM, "抱歉，该新闻没有可用的链接获取详细内容。", None)
+                return ActionResponse(Action.RESPONSE, "抱歉，该新闻没有可用的链接获取详细内容。", None)
 
             logger.bind(tag=TAG).debug(f"获取新闻详情: {title}, URL={link}")
 
@@ -142,7 +142,7 @@ def get_news(conn, category: str = None, detail: bool = False, lang: str = "zh_C
             detail_content = fetch_news_detail(link)
 
             if not detail_content or detail_content == "无法获取详细内容":
-                return ActionResponse(Action.REQLLM,
+                return ActionResponse(Action.RESPONSE,
                                       f"抱歉，无法获取《{title}》的详细内容，可能是链接已失效或网站结构发生变化。", None)
 
             # 构建详情报告
@@ -154,7 +154,7 @@ def get_news(conn, category: str = None, detail: bool = False, lang: str = "zh_C
                 f"不要提及这是总结，就像是在讲述一个完整的新闻故事)"
             )
 
-            return ActionResponse(Action.REQLLM, detail_report, detail_content)
+            return ActionResponse(Action.RESPONSE, detail_report, detail_content)
 
         # 否则，获取新闻列表并随机选择一条
         # 从配置中获取RSS URL
@@ -175,7 +175,7 @@ def get_news(conn, category: str = None, detail: bool = False, lang: str = "zh_C
         news_items = fetch_news_from_rss(rss_url)
 
         if not news_items:
-            return ActionResponse(Action.REQLLM, "抱歉，未能获取到新闻信息，请稍后再试。", None)
+            return ActionResponse(Action.RESPONSE, "抱歉，未能获取到新闻信息，请稍后再试。", None)
 
         # 随机选择一条新闻
         selected_news = random.choice(news_items)
@@ -199,8 +199,8 @@ def get_news(conn, category: str = None, detail: bool = False, lang: str = "zh_C
             f"如果用户询问更多详情，告知用户可以说'请详细介绍这条新闻'获取更多内容)"
         )
 
-        return ActionResponse(Action.REQLLM, news_report, selected_news['description'])
+        return ActionResponse(Action.RESPONSE, news_report, selected_news['description'])
 
     except Exception as e:
         logger.bind(tag=TAG).error(f"获取新闻出错: {e}")
-        return ActionResponse(Action.REQLLM, "抱歉，获取新闻时发生错误，请稍后再试。", None)
+        return ActionResponse(Action.RESPONSE, "抱歉，获取新闻时发生错误，请稍后再试。", None)
