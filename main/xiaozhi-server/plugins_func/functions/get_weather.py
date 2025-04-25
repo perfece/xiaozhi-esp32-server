@@ -12,25 +12,23 @@ GET_WEATHER_FUNCTION_DESC = {
     "function": {
         "name": "get_weather",
         "description": (
-            "获取某个地点的天气，用户应提供一个位置，比如用户说杭州天气，参数为：杭州。"
-            "如果用户说的是省份，默认用省会城市。如果用户说的不是省份或城市而是一个地名，默认用该地所在省份的省会城市。"
-            "如果用户没有指明地点，说“天气怎么样”，”今天天气如何“，location参数为空"
+            "获取某个地点的天气信息。"
         ),
         "parameters": {
             "type": "object",
             "properties": {
                 "location": {
                     "type": "string",
-                    "description": "地点名，例如杭州。可选参数，如果不提供则不传",
+                    "description": "地点名，例如杭州。可选参数，默认杭州"
                 },
                 "lang": {
                     "type": "string",
-                    "description": "返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN",
-                },
+                    "description": "返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN"
+                }
             },
-            "required": ["lang"],
-        },
-    },
+            "required": ["lang"]
+        }
+    }
 }
 
 HEADERS = {
@@ -39,7 +37,9 @@ HEADERS = {
         "(KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
     )
 }
-
+'''
+免费额度	每月50000次 https://blog.qweather.com/announce/free-subscription-service-update/
+'''
 # 天气代码 https://dev.qweather.com/docs/resource/icons/#weather-icons
 WEATHER_CODE_MAP = {
     "100": "晴",
@@ -106,11 +106,12 @@ WEATHER_CODE_MAP = {
     "999": "未知",
 }
 
-
 def fetch_city_info(location, api_key):
-    url = f"https://geoapi.qweather.com/v2/city/lookup?key={api_key}&location={location}&lang=zh"
+    # url = f"https://geoapi.qweather.com/v2/city/lookup?key={api_key}&location={location}&lang=zh"
+    url = f"https://np44u8ppvp.re.qweatherapi.com/geo/v2/city/lookup?key={api_key}&location={location}&lang=zh"
     response = requests.get(url, headers=HEADERS).json()
-    return response.get("location", [])[0] if response.get("location") else None
+    logger.info(f"-->获取城市信息: {url},return_code:{response.get('code')},response.json:{response}")
+    return response.get('location', [])[0] if response.get('location') else None
 
 
 def fetch_weather_page(url):
@@ -198,4 +199,4 @@ def get_weather(conn, location: str = None, lang: str = "zh_CN"):
     # 提示语
     weather_report += "\n（如需某一天的具体天气，请告诉我日期）"
 
-    return ActionResponse(Action.REQLLM, weather_report, None)
+    return ActionResponse(Action.RESPONSE, weather_report, city_name+current_abstract)

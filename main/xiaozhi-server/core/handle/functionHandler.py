@@ -54,6 +54,9 @@ class FunctionHandler:
         self.function_registry.register_function("get_time")
         self.function_registry.register_function("get_lunar")
         self.function_registry.register_function("handle_device")
+        self.function_registry.register_function("get_weather")
+        self.function_registry.register_function("get_news")
+        self.function_registry.register_function("get_syq")
 
     def register_config_functions(self):
         """注册配置中的函数,可以不同客户端使用不同的配置"""
@@ -95,5 +98,7 @@ class FunctionHandler:
                 )
         except Exception as e:
             logger.bind(tag=TAG).error(f"处理function call错误: {e}")
-
+            return ActionResponse(
+                action=Action.NOTFOUND, result="没有找到对应的函数", response=""
+            )
         return None

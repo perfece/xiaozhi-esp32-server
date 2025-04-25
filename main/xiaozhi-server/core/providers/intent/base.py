@@ -19,7 +19,13 @@ class IntentProviderBase(ABC):
                 "desc": "播放音乐, 用户希望你可以播放音乐, 只用于播放音乐的意图",
             },
             {"name": "get_time", "desc": "获取今天日期或者当前时间信息"},
-            {"name": "continue_chat", "desc": "继续聊天"},
+            {"name": "continue_chat", "desc": "继续聊天（包括常规聊天；水利知识问答：工程基础信息，如校核水位、汛限水位、死水位等水利场景知识问答）"},
+            {"name": "get_weather", "desc": "获取天气的意图"}, #，参数location返回地名，如杭州；参数lang返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN"},
+            {"name": "get_news", "desc": "获取新闻的意图"},
+            {"name": "get_syq", "desc": "获取水雨情实时数据的意图"},
+            {"name": "change_role", "desc": "切换角色意图"},
+            {"name": "handle_device", "desc": "设置iot设备的状态意图,获取或设置设备的音量/亮度/闹钟"},
+            # {"name": "hass_set_state", "desc": "设置homeassistant里设备的状态意图,设置homeassistant里设备的状态,包括开、关,调整灯光亮度,调整播放器的音量,设备的暂停、继续、静音操作"},
         ]
 
     def set_llm(self, llm):

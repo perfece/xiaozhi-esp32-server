@@ -36,7 +36,7 @@ def get_time():
         f"当前日期: {current_date}，当前时间: {current_time}， {current_weekday}"
     )
 
-    return ActionResponse(Action.REQLLM, response_text, None)
+    return ActionResponse(Action.RESPONSE, response_text, None)
 
 
 get_lunar_function_desc = {
