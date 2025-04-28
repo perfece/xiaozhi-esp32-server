@@ -110,7 +110,6 @@ def fetch_city_info(location, api_key):
     # url = f"https://geoapi.qweather.com/v2/city/lookup?key={api_key}&location={location}&lang=zh"
     url = f"https://np44u8ppvp.re.qweatherapi.com/geo/v2/city/lookup?key={api_key}&location={location}&lang=zh"
     response = requests.get(url, headers=HEADERS).json()
-    logger.info(f"-->获取城市信息: {url},return_code:{response.get('code')},response.json:{response}")
     return response.get('location', [])[0] if response.get('location') else None
 
 

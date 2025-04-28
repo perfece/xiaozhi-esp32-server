@@ -14,6 +14,8 @@ class LLMProvider(LLMProviderBase):
         self.api_key = config["api_key"]
         self.base_url = config.get("url")
         self.kb_name = '' #config.get("kb_name")
+        self.model = config.get("model")
+        self.platform = config.get("platform")
 
     def response(self, session_id, dialogue):
         try:
@@ -27,7 +29,9 @@ class LLMProvider(LLMProviderBase):
             request_json = {
                 "query": query,
                 "prompt": prompt,
-                "stream": stream
+                "stream": stream,
+                "model":  self.model,
+                "platform":  self.platform
             }
             # 发起流式请求
             # logger.info(f"-->request_json:{json.dumps(request_json)}")

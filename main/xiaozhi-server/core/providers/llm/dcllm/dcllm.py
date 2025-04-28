@@ -29,7 +29,7 @@ class LLMProvider(LLMProviderBase):
                 "score_threshold": 0.5,
                 "prompt_name": self.prompt_name,
                 "stream": self.stream ,
-                "mode":self.mode,
+                # "mode":self.mode,
                 "temperature": 1,
                 "use_reg": False,
                 "history": []
@@ -74,26 +74,26 @@ class LLMProvider(LLMProviderBase):
             logger.bind(tag=TAG).error(f"Error in response generation: {e}")
             yield "【服务响应异常】"
 
-    def response_with_functions(self, session_id, dialogue, functions=None):
-        logger.bind(tag=TAG).info(f"-->dcllm functions: {functions}")
-        if len(dialogue) == 2 and functions is not None and len(functions) > 0:
-            self.prompt_name = "empty_q"
-            self.mode = "chat"
-            self.stream = False
-            # 第一次调用llm， 取最后一条用户消息，附加tool提示词
-            last_msg = dialogue[-1]["content"]
-            function_str = json.dumps(functions, ensure_ascii=False)
-            modify_msg = get_system_prompt_for_function(function_str) + last_msg
-            dialogue[-1]["content"] = modify_msg
-
-            # 如果最后一个是 role="tool"，附加到user上
-        if len(dialogue) > 1 and dialogue[-1]["role"] == "tool":
-            assistant_msg = "\ntool call result: " + dialogue[-1]["content"] + "\n\n"
-            while len(dialogue) > 1:
-                if dialogue[-1]["role"] == "user":
-                    dialogue[-1]["content"] = assistant_msg + dialogue[-1]["content"]
-                    break
-                dialogue.pop()
-
-        for token in self.response(session_id, dialogue):
-            yield token, None
+    # def response_with_functions(self, session_id, dialogue, functions=None):
+    #     logger.bind(tag=TAG).info(f"-->dcllm functions: {functions}")
+    #     if len(dialogue) == 2 and functions is not None and len(functions) > 0:
+    #         # self.prompt_name = "empty_q"
+    #         # self.mode = "chat"
+    #         # self.stream = False
+    #         # 第一次调用llm， 取最后一条用户消息，附加tool提示词
+    #         last_msg = dialogue[-1]["content"]
+    #         function_str = json.dumps(functions, ensure_ascii=False)
+    #         modify_msg = get_system_prompt_for_function(function_str) + last_msg
+    #         dialogue[-1]["content"] = modify_msg
+    #
+    #         # 如果最后一个是 role="tool"，附加到user上
+    #     if len(dialogue) > 1 and dialogue[-1]["role"] == "tool":
+    #         assistant_msg = "\ntool call result: " + dialogue[-1]["content"] + "\n\n"
+    #         while len(dialogue) > 1:
+    #             if dialogue[-1]["role"] == "user":
+    #                 dialogue[-1]["content"] = assistant_msg + dialogue[-1]["content"]
+    #                 break
+    #             dialogue.pop()
+    #
+    #     for token in self.response(session_id, dialogue):
+    #         yield token, None

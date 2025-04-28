@@ -793,7 +793,9 @@ class ConnectionHandler:
                     and tts_file is not None
                     and os.path.exists(tts_file)
                 ):
-                    os.remove(tts_file)
+                    self.logger.bind(tag=TAG).info(f"-->删除临时文件: {tts_file}")
+                    if not tts_file.startswith("config"):
+                        os.remove(tts_file)
             except Exception as e:
                 self.logger.bind(tag=TAG).error(f"TTS任务处理错误: {e}")
                 self.clearSpeakStatus()
@@ -836,14 +838,24 @@ class ConnectionHandler:
         if text is None or len(text) <= 0:
             self.logger.bind(tag=TAG).info(f"无需tts转换，query为空，{text}")
             return None, text, text_index
+        self.logger.bind(tag=TAG).info(f"-->TTS 文件生成开始: {text}")
         tts_file = self.tts.to_tts(text)
         if tts_file is None:
             self.logger.bind(tag=TAG).error(f"tts转换失败，{text}")
             return None, text, text_index
-        self.logger.bind(tag=TAG).debug(f"TTS 文件生成完毕: {tts_file}")
+        self.logger.bind(tag=TAG).info(f"-->TTS 文件生成完毕: {tts_file}")
         if self.max_output_size > 0:
             add_device_output(self.headers.get("device-id"), len(text))
         return tts_file, text, text_index
+
+    def speak_and_play_wait(self,text, tts_file):
+        """
+        发送 请等候 问候语
+        """
+        self.logger.bind(tag=TAG).info(f"-->TTS 文件生成完毕: {tts_file}")
+        if self.max_output_size > 0:
+            add_device_output(self.headers.get("device-id"), len(text))
+        return tts_file, text, 0
 
     def clearSpeakStatus(self):
         self.logger.bind(tag=TAG).debug(f"清除服务端讲话状态")

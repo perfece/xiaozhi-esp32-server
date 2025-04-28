@@ -29,7 +29,7 @@ log:
   # 设置日志文件输出的格式，时间、日志级别、标签、消息
   log_format_file: "{time:YYYY-MM-DD HH:mm:ss} - {version}_{selected_module} - {name} - {level} - {extra[tag]} - {message}"
   # 设置日志等级：INFO、DEBUG
-  log_level: INFO
+  log_level: DEBUG
   # 设置日志路径
   log_dir: tmp
   # 设置日志文件
@@ -132,7 +132,7 @@ selected_module:
   # 将根据配置名称对应的type调用实际的LLM适配器
   LLM: DCLLM #ChatGLMLLM #DCLLM
   # TTS将根据配置名称对应的type调用实际的TTS适配器
-  TTS: EdgeTTS #CosyVoiceSiliconflow #EdgeTTS
+  TTS: AliyunTTS #CosyVoiceSiliconflow #EdgeTTS AliyunTTS
   # 记忆模块，默认不开启记忆；如果想使用超长记忆，推荐使用mem0ai；如果注重隐私，请使用本地的mem_local_short
   Memory: nomem
   # 意图识别模块开启后，可以播放音乐、控制音量、识别退出指令。
@@ -154,7 +154,7 @@ Intent:
     # 配备意图识别独立的思考模型
     # 如果这里不填，则会默认使用selected_module.LLM的模型作为意图识别的思考模型
     # 如果你的selected_module.LLM选择了DifyLLM或CozeLLM，这里最好使用独立的LLM作为意图识别，例如使用免费的ChatGLMLLM
-    llm: DCINTENT
+    llm: ChatGLMLLM #DCINTENT
   function_call:
     # 不需要动type
     type: function_call
@@ -229,7 +229,7 @@ VAD:
     type: silero
     threshold: 0.5
     model_dir: models/snakers4_silero-vad
-    min_silence_duration_ms: 700  # 如果说话停顿比较长，可以把这个值设置大一些
+    min_silence_duration_ms: 200  # 如果说话停顿比较长，可以把这个值设置大一些
 
 LLM:
   # 所有openai类型均可以修改超参，以AliLLM为例
@@ -241,6 +241,8 @@ LLM:
     url: https://zszx.dcyun.com:48468/dcrobotChat/chat/qa_chat # dcLM 服务地址
     api_key: lm-dc # 测试API Key
     kb_name:   # 知识库名称
+    platform: ali #ali百炼
+    model: qwen2.5-14b-instruct  #  qwen2.5-14b-instruct qwen2.5-instruct
   DCLLM:
     # 定义定川LLM API类型
     type: dcllm
@@ -546,11 +548,11 @@ TTS:
     # 定义TTS API类型
     type: aliyun
     output_dir: tmp/
-    appkey: 你的阿里云智能语音交互服务项目Appkey
-    token: 你的阿里云智能语音交互服务AccessToken，临时的24小时，要长期用下方的access_key_id，access_key_secret
-    voice: xiaoyun
-    access_key_id: 你的阿里云账号access_key_id
-    access_key_secret: 你的阿里云账号access_key_secret
+    appkey: sJYbtlGsEFsg7AGi
+    token: 648ff5daf8ea4dd6833c28475464fc77
+    voice: zhixiaobai #zhitian_emo #zhimi_emo  #xiaoyun
+    access_key_id: LTAI5t8d5jXVr63PW8vkQGgS
+    access_key_secret: 86MB2VnfylEdvoZqf44odFyJZNIN6i
 
     # 以下可不用设置，使用默认设置
     # format: wav

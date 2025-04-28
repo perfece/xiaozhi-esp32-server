@@ -20,7 +20,6 @@ def get_random_speak():
         "正在为您查询，请稍等。",
         "正在为您查找最佳答案。",
         "已收到您的吩咐，请稍后。",
-        "请稍等片刻，正在处理您的问题。",
         "请稍等，正在获取答案。",
         "稍等一下下，马上就有答案啦。",
     ]
@@ -56,16 +55,18 @@ async def handleAudioMessage(conn, audio):
         if len(conn.asr_audio) < 15:
             conn.asr_server_receive = True
         else:
+            # audios, duration = conn.tts.audio_to_opus_data(f'config/assets/wait_voice/wait_1.mp3')
+            # await sendAudio(conn, audios)
+
             text, _ = await conn.asr.speech_to_text(conn.asr_audio, conn.session_id)
             logger.bind(tag=TAG).info(f"识别文本: {text}")
             await send_stt_message(conn, f"{text}")
             text_len, _ = remove_punctuation_and_length(text)
             if text_len > 0:
-                # 打招呼
+                # 打招呼 发送
                 segment_text = get_random_speak()
-                conn.recode_first_last_text(segment_text, 0)
                 future = conn.executor.submit(
-                    conn.speak_and_play, segment_text, 0
+                    conn.speak_and_play_wait, segment_text, f'config/assets/wait_voice/{segment_text}.wav'
                 )
                 conn.tts_queue.put(future)
 

@@ -37,43 +37,44 @@ class IntentProvider(IntentProviderBase):
             "1. 思考意图类型，生成function_call格式"
             "\n\n"
             "返回格式示例：\n"
+            '0. 继续聊天意图: {"function_call": {"name": "continue_chat"}}\n'
             '1. 播放音乐意图: {"function_call": {"name": "play_music", "arguments": {"song_name": "音乐名称"}}}\n'
             '2. 结束对话意图: {"function_call": {"name": "handle_exit_intent", "arguments": {"say_goodbye": "goodbye"}}}\n'
             '3. 获取当天日期时间: {"function_call": {"name": "get_time"}}\n'
-            '4. 继续聊天意图: {"function_call": {"name": "continue_chat"}}\n'
-            '5. 获取天气意图: {"function_call": {"name": "get_weather", "arguments": {"location": "地名","lang":"返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN"}}}\n'
-            '6. 获取新闻意图: {"function_call": {"name": "get_news", "arguments": {"category": "新闻类别","detail":"默认为false","lang":"返回用户使用的语言code，默认zh_CN"}}}\n'
-            '7. 切换角色意图: {"function_call": {"name": "change_role", "arguments": {"role_name": "要切换的角色名字","role":"要切换的角色，可选的角色有：[机车女友,英语老师,好奇小男孩]"}}}\n'
-            '8. 设备控制意图: {"function_call": {"name": "handle_device", "arguments":｛"device_type":"设备类型，可选值：Speaker(音量),Screen(亮度)","action":"动作名称，可选值：get(获取),set(设置),raise(提高),lower(降低)","value":"值大小，可选值：0-100之间的整数"｝}}\n'
-            '9. 查询水雨情实时数据意图: {"function_call": {"name": "get_syq", "arguments": {"query": "用户问题"}}}\n'
+            '4. 获取天气意图: {"function_call": {"name": "get_weather", "arguments": {"location": "地名","lang":"默认zh_CN"}}}\n'
+            '5. 获取新闻意图: {"function_call": {"name": "get_news", "arguments": {"category": "新闻类别","detail":"默认为false","lang":"默认zh_CN"}}}\n'
+            '6. 设备控制意图: {"function_call": {"name": "handle_device", "arguments":｛"device_type":"设备类型，可选值：Speaker(音量),Screen(亮度)","action":"动作名称，可选值：get(获取),set(设置),raise(提高),lower(降低)","value":"值大小，可选值：0-100之间的整数"｝}}\n'
+            '7. 查询水雨情实时数据意图: {"function_call": {"name": "get_syq", "arguments": {"query": "用户问题"}}}\n'
+             # '8. 切换角色意图: {"function_call": {"name": "change_role", "arguments": {"role_name": "要切换的角色名字","role":"要切换的角色，可选的角色有：[机车女友,英语老师,好奇小男孩]"}}}\n'
             # '9. 设置homeassistant里设备的状态意图: {"function_call": {"name": "hass_set_state","arguments":{"entity_id":"需要操作的设备id,homeassistant里的entity_id",'
             # ' "state":{"type": "需要操作的动作,打开设备:turn_on,关闭设备:turn_off,增加亮度:brightness_up,降低亮度:brightness_down,设置亮度:brightness_value,增加>音量:,volume_up降低音量:volume_down,设置音量:volume_set,设备暂停:pause,设备继续:continue,静音/取消静音:volume_mute",'
             # '"input":"只有在设置音量,设置亮度时候 才需要,有效值为1-100","is_muted":"只有在设置静音操作时才需要,设置静音的时候该值为true,取消静音时该值为false"}}}}\n'
-            "\n"
-            "注意:\n"
-            '- 播放音乐：无歌名时，song_name设为"random"\n'
-            "- 如果没有明显的意图，应按照继续聊天意图处理\n"
-            "- 只返回纯JSON，不要任何其他内容\n"
-            "\n"
-            "示例分析:\n"
-            "```\n"
-            "用户: 你也太搞笑了\n"
-            '返回: {"function_call": {"name": "continue_chat"}}\n'
-            "```\n"
-            "```\n"
-            "用户: 现在是几号了?现在几点了？\n"
-            '返回: {"function_call": {"name": "get_time"}}\n'
-            "```\n"
-            "```\n"
-            "用户: 我们明天再聊吧\n"
-            '返回: {"function_call": {"name": "handle_exit_intent"}}\n'
-            "```\n"
-            "```\n"
-            "用户: 播放中秋月\n"
-            '返回: {"function_call": {"name": "play_music", "arguments": {"song_name": "中秋月"}}}\n'
-            "```\n"
-            "```\n"
-            "可用的音乐名称:\n"
+            
+            # "\n"
+            # "注意:\n"
+            # '- 播放音乐：无歌名时，song_name设为"random"\n'
+            # "- 如果没有明显的意图，应按照继续聊天意图处理\n"
+            # "- 只返回纯JSON，不要任何其他内容\n"
+            # "\n"
+            # "示例分析:\n"
+            # "```\n"
+            # "用户: 你也太搞笑了\n"
+            # '返回: {"function_call": {"name": "continue_chat"}}\n'
+            # "```\n"
+            # "```\n"
+            # "用户: 现在是几号了?现在几点了？\n"
+            # '返回: {"function_call": {"name": "get_time"}}\n'
+            # "```\n"
+            # "```\n"
+            # "用户: 我们明天再聊吧\n"
+            # '返回: {"function_call": {"name": "handle_exit_intent"}}\n'
+            # "```\n"
+            # "```\n"
+            # "用户: 播放中秋月\n"
+            # '返回: {"function_call": {"name": "play_music", "arguments": {"song_name": "中秋月"}}}\n'
+            # "```\n"
+            # "```\n"
+            # "可用的音乐名称:\n"
         )
         return prompt
 
@@ -104,7 +105,7 @@ class IntentProvider(IntentProviderBase):
 
         # 记录整体开始时间
         total_start_time = time.time()
-
+        logger.info(f"-->意图开始")
         # 打印使用的模型信息
         model_info = getattr(self.llm, "model_name", str(self.llm.__class__.__name__))
         logger.bind(tag=TAG).debug(f"使用意图识别模型: {model_info}")
@@ -125,6 +126,7 @@ class IntentProvider(IntentProviderBase):
 
         # 清理缓存
         self.clean_cache()
+        logger.info(f"-->缓存处理")
 
         # 构建用户最后一句话的提示
         msgStr = ""
