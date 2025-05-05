@@ -23,9 +23,10 @@ class IntentProviderBase(ABC):
             {"name": "get_time", "desc": "获取今天日期或者当前时间信息"},
             {"name": "get_weather", "desc": "获取天气的意图"}, #，参数location返回地名，如杭州；参数lang返回用户使用的语言code，例如zh_CN/zh_HK/en_US/ja_JP等，默认zh_CN"},
             {"name": "get_news", "desc": "获取新闻的意图"},
-            {"name": "get_syq", "desc": "获取实时水雨情信息。仅包括水位、当前库容、雨量、面雨量数据的意图。"},
             {"name": "change_role", "desc": "切换角色意图"},
             {"name": "handle_device", "desc": "设置iot设备的状态意图,获取或设置设备的音量/亮度/闹钟"},
+            {"name": "get_syq", "desc": "获取实时水雨情信息。仅包括水位、当前库容、雨量、面雨量数据的意图。"},
+            {"name": "get_dify_gcjj", "desc": "获取工程简历的意图。仅包括xx水库的工程简历简报|xx水库生命周期的历程的意图。"},
             # {"name": "hass_set_state", "desc": "设置homeassistant里设备的状态意图,设置homeassistant里设备的状态,包括开、关,调整灯光亮度,调整播放器的音量,设备的暂停、继续、静音操作"},
 
         ]

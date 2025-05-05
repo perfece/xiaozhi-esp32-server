@@ -45,6 +45,7 @@ class IntentProvider(IntentProviderBase):
             '5. 获取新闻意图: {"function_call": {"name": "get_news", "arguments": {"category": "新闻类别","detail":"默认为false","lang":"默认zh_CN"}}}\n'
             '6. 设备控制意图: {"function_call": {"name": "handle_device", "arguments":｛"device_type":"设备类型，可选值：Speaker(音量),Screen(亮度)","action":"动作名称，可选值：get(获取),set(设置),raise(提高),lower(降低)","value":"值大小，可选值：0-100之间的整数"｝}}\n'
             '7. 查询水雨情实时数据意图: {"function_call": {"name": "get_syq", "arguments": {"query": "用户问题"}}}\n'
+            '8. 获取水库工程简历的意图，只包括场景：xx水库的工程简历简报|xx水库生命周期的历程: {"function_call": {"name": "get_dify_gcjj", "arguments": {"query": "用户问题"}}}\n'
              # '8. 切换角色意图: {"function_call": {"name": "change_role", "arguments": {"role_name": "要切换的角色名字","role":"要切换的角色，可选的角色有：[机车女友,英语老师,好奇小男孩]"}}}\n'
             # '9. 设置homeassistant里设备的状态意图: {"function_call": {"name": "hass_set_state","arguments":{"entity_id":"需要操作的设备id,homeassistant里的entity_id",'
             # ' "state":{"type": "需要操作的动作,打开设备:turn_on,关闭设备:turn_off,增加亮度:brightness_up,降低亮度:brightness_down,设置亮度:brightness_value,增加>音量:,volume_up降低音量:volume_down,设置音量:volume_set,设备暂停:pause,设备继续:continue,静音/取消静音:volume_mute",'

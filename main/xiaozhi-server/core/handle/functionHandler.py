@@ -57,6 +57,7 @@ class FunctionHandler:
         self.function_registry.register_function("get_weather")
         self.function_registry.register_function("get_news")
         self.function_registry.register_function("get_syq")
+        self.function_registry.register_function("get_dify_gcjj")
 
     def register_config_functions(self):
         """注册配置中的函数,可以不同客户端使用不同的配置"""
