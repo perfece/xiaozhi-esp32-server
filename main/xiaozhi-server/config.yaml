@@ -552,7 +552,7 @@ TTS:
     token: 648ff5daf8ea4dd6833c28475464fc77
     voice: zhixiaobai #zhitian_emo #zhimi_emo  #xiaoyun
     access_key_id: LTAI5t8d5jXVr63PW8vkQGgS
-    access_key_secret: 86MB2VnfylEdvoZqf44odFyJZNIN6i
+    access_key_secret: empty
 
     # 以下可不用设置，使用默认设置
     # format: wav
