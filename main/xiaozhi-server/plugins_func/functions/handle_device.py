@@ -6,7 +6,7 @@ import asyncio
 TAG = __name__
 logger = setup_logging()
 
-
+DEFAULT_VALUE = 20
 async def _get_device_status(conn, device_name, device_type, property_name):
     """获取设备状态"""
     status = await get_iot_status(conn, device_type, property_name)
@@ -29,7 +29,9 @@ async def _set_device_property(conn, device_name, device_type, method_name, prop
         current_value = new_value
 
     # 限制属性范围在0到100之间
-    current_value = max(0, min(100, current_value))
+    current_value = max(0, min(100, int(current_value)))
+    if type(current_value) != int:
+        current_value = DEFAULT_VALUE
 
     await send_iot_conn(conn, device_type, method_name, {property_name: current_value})
     return current_value
